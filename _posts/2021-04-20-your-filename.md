@@ -5,6 +5,7 @@ categories:
 tags:
   - content
   - test
+use_math: true
 ---
 # Hello
 
@@ -18,6 +19,6 @@ print('Hello')
 
 ## Equation
 This is $f(x)$
-\begin{equation}
+$$
 g(x) = \int_0^1f(x)dx
-\end{equation}
+$$
