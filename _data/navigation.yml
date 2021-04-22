@@ -1,10 +1,8 @@
 # main links
 main:
-   - title: "python"
-     url: /python/
-   - title: "linux"
-     url: /linux/
-   - title: "vasp"
-     url: /vasp/
-   - title: "paper review"
-     url: /paper review/
+  - title: "Python"
+    url: https://mjhong0708.github.io/categories/#python
+  - title: "Linux/VASP"
+    url: https://mjhong0708.github.io/categories/#linuxvasp
+  - title: "Paper review"
+    url: https://mjhong0708.github.io/categories/#paper
