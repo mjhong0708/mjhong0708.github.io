@@ -16,4 +16,5 @@ ASE의 핵심 클래스인 `Atoms` 클래스와 `Atom`클래스에 대해 알아
 ### Atoms의 주요 attribute
 `Atoms` 객체에는 다양한 attribute가 있는데, 그 중 자주 쓰이는 것들은 다음과 같다.
 - `positions` : 각 원자들의 cartesian coordinate로 이루어진 (n x 3) `ndarray`
-- 
+- `cell` : 
+
