@@ -1,0 +1,128 @@
+---
+published: true
+---
+ASE의 핵심 클래스인 `Atoms` 클래스와 `Atom`클래스에 대해 알아보자.
+
+## Prerequisities
+
+다음 내용들을 알고 있으면 이 포스트를 더욱 이해하기 쉽다.
+- python 개념들
+  - class
+  - sequence
+- Unit cell
+
+## Atoms 클래스 소개
+
+`ASE`에서 모든 구조 정보는  `Atoms` 객체의 attribute로 저장되며, `Atoms`의 메소드를 통해 원자 간의 거리, 각도 등의 성질을 계산하는 기능을 제공한다. 
+
+### Atoms의 주요 attribute
+
+`Atoms` 객체에는 다양한 attribute가 있는데, 그 중 자주 쓰이는 것들은 다음과 같다.
+
+- `cell`: unit cell을 정의하는 (3 x 3) `array`이다. 각 row들이 각각 $\vec a, \vec b, \vec c$를 의미한다. (분자의 경우 필수는 아님)
+- `positions`: 각 원자들의 cartesian coordinate로 이루어진 (n x 3) `array`이다.
+- `symbols`: 각 원자들의 원소기호로 이루어진 `sequence`인데, `'C2O6'`과 같이 화학식의 형태로 선언할 수 있다. <sup>[1](#footnote_1)</sup>
+- `pbc`: periodic boundary condition을 적용할지에 대한 boolean 값이다.
+
+### Atoms 객체 생성하기 
+
+가장 단순한 방법으로, 직접 attribute를 지정하여 `Atoms` 객체를 만들 수 있다.
+다음은 FCC Pt의 conventional unit cell을 만드는 코드이다.
+
+```python
+>>> import numpy as np
+>>> from ase import Atoms
+>>> lc = 3.92  # Pt의 lattice constant
+>>> cell = lc * np.eye(3, 3)  # 모든 대각성분이 3인 대각행렬 (cubic unit cell)
+>>> positions = np.array([
+...                 [0, 0, 0],
+...                 [0.5, 0.5, 0],
+...                 [0.5, 0, 0.5],
+...                 [0, 0.5, 0.5],
+...              ]) * lc  # FCC
+>>> fcc_Pt = Atoms(symbols="Pt4", cell=cell, positions=positions, pbc=True) 
+>>> print(fcc_Pt)
+Atoms(symbols='Pt4', pbc=True, cell=[3.92, 3.92, 3.92])
+``` 
+
+만들어진 구조를 시각적으로 확인하려면 `ase.visualize.view` 함수를 이용한다.
+
+```python
+>>> from ase.visualize import view
+>>> view(fcc_Pt)
+```
+[ase view](https://user-images.githubusercontent.com/61532201/115746207-1ae97f80-a3cf-11eb-8526-fab0664bf450.png){: width="50%" .align-center}
+
+이외에도 `ase.build` 모듈을 사용하는 방법, `ase.io.read`를 통해 파일을 불러오는 방법 등이 있는데, 이는 다음 포스트에서 설명한다.
+
+### Atom 객체
+사실, `Atoms` 객체는 `Atom` 객체로 이루어진 하나의 `sequence`이다. 따라서 `atoms[1]`, `atoms[:4]`와 같이 인덱싱이 가능하다. 반대로 `Atom` 객체를 만들고 이를 통해 `Atoms` 객체를 만들 수도 있으나, 잘 쓰이는 방법은 아니다. `Atoms`는 `list`와 같이 `Atoms.append(atom)` 메소드가 구현되어 있어, `Atom` 객체를 기존 `Atoms` 객체에 추가할 수 있다. 
+
+`Atom` 객체를 만들고, 이를 위에서 만든 FCC Pt에 붙여보자.
+
+```python
+>>> from ase import Atom
+>>> new_position = lc * np.array([0.5, 0.5, 0.5])  # interstitial site
+>>> H = Atom('H', position=new_position)
+>>> print(H)
+Atom('Pt', [1.96, 1.96, 1.96])
+>>> fcc_Pt.append(H)
+>>> print(fcc_Pt)
+Atoms(symbols='Pt4H', pbc=True, cell=[3.92, 3.92, 3.92])
+>>> print(fcc_Pt.positions)
+[[0.   0.   0.  ]
+ [1.96 1.96 0.  ]
+ [1.96 0.   1.96]
+ [0.   1.96 1.96]
+ [1.96 1.96 1.96]]
+>>> view(fcc_Pt)
+```
+[ase view_2](https://user-images.githubusercontent.com/61532201/115749707-56d21400-a3d2-11eb-8132-1f30237b8b15.png){: width="50%" .align-center}
+
+### Atoms 객체를 파일로 저장하고 읽기
+`Atoms.write` 메소드를 이용하면 `Atoms` 객체를 파일로 저장할 수 있다. 이 때 파일 형식은 확장자를 통해 자동으로 인식한다.<sup>[2](#footnote_2)</sup> 
+
+위에서 만든 객체를 `VASP`의 `POSCAR` 포맷으로 저장해보자.
+
+```python
+>>> fcc_Pt.write("fcc_Pt_int_H.vasp", direct=True, vasp5=True)  # vasp 5 호환, direct coordinate로 저장)
+```
+
+그러면 다음과 같이 저장되는 것을 확인할 수 있다.
+
+```
+Pt  H
+ 1.0000000000000000
+     3.9199999999999999    0.0000000000000000    0.0000000000000000
+     0.0000000000000000    3.9199999999999999    0.0000000000000000
+     0.0000000000000000    0.0000000000000000    3.9199999999999999
+  Pt   H
+   4   1
+Direct
+  0.0000000000000000  0.0000000000000000  0.0000000000000000
+  0.5000000000000000  0.5000000000000000  0.0000000000000000
+  0.5000000000000000  0.0000000000000000  0.5000000000000000
+  0.0000000000000000  0.5000000000000000  0.5000000000000000
+  0.5000000000000000  0.5000000000000000  0.5000000000000000
+```
+
+이 파일을 다시 읽어서 `Atoms` 객체로 만드려면 `ase.io.read`를 사용한다.
+
+```python
+>>> from ase.io import read
+>>> fcc_Pt = read("fcc_Pt_int_H.vasp")
+```
+
+`ase.io.read`와 `write` 메소드를 적당히 써먹으면 파일 형식 변환도 간단히 할 수 있다. (`vasp` 파일을 읽어서 `cif`로 쓴다던가...)
+
+## 요약
+
+- `symbols`, `cell`, `positions`를 통해 `Atoms` 객체를 생성할 수 있다.
+- `Atoms`는 `Atom`으로 이루어진 `sequence`이다.
+- `Atoms`를 파일로 쓰고, 그 파일을 읽어 `Atoms`를 만들 수 있다.
+
+이외에도 `Atoms`에는 다양한 메소드가 있는데, 다음 포스트에서 알아보자.
+
+<a name="footnote_1">1</a>: 정확한 설명은 공식 문서의 `ase.symbols.Symbols` 객체 설명 참조
+
+<a name="footnote_2">2</a>: [공식 문서의 설명](https://wiki.fysik.dtu.dk/ase/ase/io/io.html) 참조
