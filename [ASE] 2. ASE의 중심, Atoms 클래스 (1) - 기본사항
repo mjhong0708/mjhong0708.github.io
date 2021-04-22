@@ -1,5 +1,11 @@
 ---
 published: true
+categories:
+  - python
+tags:
+  - ase
+mathjax: true
+toc: true
 ---
 ASE의 핵심 클래스인 `Atoms` 클래스와 `Atom`클래스에 대해 알아보자.
 
