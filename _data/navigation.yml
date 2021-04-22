@@ -2,3 +2,11 @@
 main:
    - title: "test"
      url: /test/
+   - title: "python"
+     url: /python/
+   - title: "linux"
+     url: /linux/
+   - title: "vasp"
+     url: /vasp/
+   - title: "paper review"
+     url: /paper review/
