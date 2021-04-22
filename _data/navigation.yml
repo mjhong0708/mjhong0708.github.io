@@ -1,7 +1,5 @@
 # main links
 main:
-   - title: "test"
-     url: /test/
    - title: "python"
      url: /python/
    - title: "linux"
