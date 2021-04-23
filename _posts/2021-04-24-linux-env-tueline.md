@@ -1,8 +1,9 @@
 ---
 title: '[env] 리눅스에서 trueline으로 예쁜 터미널 만들기'
 categories:
-  - linux
+  - linuxvasp
 tags:
+  - linux
   - env
 mathjax: true
 toc: true
