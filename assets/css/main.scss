@@ -5,7 +5,7 @@
 // https://mmistakes.github.io/minimal-mistakes/docs/stylesheets/#customizing
 $sans-serif: 'Noto Sans KR';
 $monospace: 'Fira Code';
-$type-size-4-5: 1.12em !default; // Ubuntu Mono is a bit small
+$type-size-4-5: 1em !default; // Ubuntu Mono is a bit small
 
 @charset "utf-8";
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
