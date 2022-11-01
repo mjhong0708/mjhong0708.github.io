@@ -14,7 +14,7 @@ ORCA는 다양한 분자 전산모사 기법을 제공하는 계산화학 소프
 
 ## 설치하기
 
-[ORCA forum의 다운로드 페이지]([ORCA Forum - Downloads (mpg.de)](https://orcaforum.kofo.mpg.de/app.php/dlext/))에서 다운받을 수 있다 (회원가입 필요). 운영체제에 맞는 버전을 받아 임의의 경로에 다운받고 압축을 풀면 된다. 다운받고 난 뒤에는 압축을 푼 폴더를 `PATH`와 `LD_LIBRARY_PATH`에 추가하면 ORCA의 설치가 완료된다.
+[ORCA forum의 다운로드 페이지](https://orcaforum.kofo.mpg.de/app.php/dlext/)에서 다운받을 수 있다 (회원가입 필요). 운영체제에 맞는 버전을 받아 임의의 경로에 다운받고 압축을 풀면 된다. 다운받고 난 뒤에는 압축을 푼 폴더를 `PATH`와 `LD_LIBRARY_PATH`에 추가하면 ORCA의 설치가 완료된다.
 
 주의해야 할 점은, 다운로드 받은 파일에 표시되어 있는 OpenMPI 버전을 사용해야 한다는 점이다. 작성 시점 기준으로 ORCA 5.0.3d은 openmpi 4.1.1을 사용하며, 설치되어있지 않은 경우 직접 설치해야 한다. 이 때 시스템에 설치하기보다는 별도의 공간에 설치하는 것이 좋다.
 
