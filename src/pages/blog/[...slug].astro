@@ -1,0 +1,49 @@
+---
+import Container from "@/components/Container.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const blogCollection = await getCollection(
+    "blog",
+    (post) => post.data.draft !== true,
+  );
+  const posts = blogCollection.sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+  );
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<RootLayout>
+  <Container>
+    <div class="mb-8">
+      <p class="text-sm text-gray-600 mb-2">
+        {
+          new Date(post.data.date).toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+      </p>
+      <h1 class="font-semibold text-3xl">{post.data.title}</h1>
+    </div>
+    <article
+      class="prose max-w-none dark:prose-invert
+             prose-h1:font-semibold prose-h1:text-2xl
+             prose-h2:text-2xl prose-h2:font-semibold
+             prose-h3:text-xl prose-h3:font-semibold
+             prose-p:text-gray-800"
+    >
+    <article>
+      <Content />
+    </article>
+  </Container>
+</RootLayout>

@@ -1,0 +1,60 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import RootLayout from "@/layouts/RootLayout.astro";
+import Container from "@/components/Container.astro";
+
+const blogCollection = await getCollection(
+  "blog",
+  (post) => post.data.draft !== true,
+);
+const posts = blogCollection.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+
+const postsByYear: Record<string, CollectionEntry<"blog">[]> = {};
+posts.forEach((post) => {
+  const year = new Date(post.data.date).getFullYear().toString();
+  if (!postsByYear[year]) {
+    postsByYear[year] = [];
+  }
+  postsByYear[year].push(post);
+});
+const years = Object.keys(postsByYear).sort(
+  (a, b) => parseInt(b) - parseInt(a),
+);
+---
+
+<RootLayout>
+  <Container>
+    <div class="space-y-10">
+      <h1 class="font-semibold text-2xl">Blog Posts</h1>
+      {
+        years.map((year) => (
+          <div class="space-y-6">
+            <h2 class="font-semibold text-xl">{year}</h2>
+            <div class="space-y-4">
+              {postsByYear[year].map((post) => (
+                <div>
+                  <a
+                    href={`/blog/${post.data.slug ?? post.id}`}
+                    class="text-lg font-medium hover:underline"
+                  >
+                    {post.data.title}
+                  </a>
+                  <p class="text-base text-gray-800">{post.data.description}</p>
+                  <p class="text-sm text-gray-600">
+                    {new Date(post.data.date).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Container>
+</RootLayout>
