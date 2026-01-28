@@ -2,7 +2,7 @@
 import LinkedBadge from "@/components/LinkedBadge.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
 import Container from "@/components/Container.astro";
-import { getAllTags, getPublishedPosts, countTags } from "@/lib/blog";
+import { getPublishedPosts, countTags } from "@/lib/blog";
 
 const tagCounts = countTags(await getPublishedPosts());
 ---
