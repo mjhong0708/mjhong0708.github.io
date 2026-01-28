@@ -1,16 +1,10 @@
 ---
-import { getCollection } from "astro:content";
 import LinkedBadge from "@/components/LinkedBadge.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
 import Container from "@/components/Container.astro";
+import { getAllTags, getPublishedPosts } from "@/lib/blog";
 
-const posts = await getCollection("blog", (post) => post.data.draft !== true);
-const tagsSet = new Set<string>();
-posts.forEach((post) => {
-  const tags = post.data.tags || [];
-  tags.forEach((tag) => tagsSet.add(tag));
-});
-const tags = Array.from(tagsSet).sort();
+const tags = getAllTags(await getPublishedPosts());
 ---
 
 <RootLayout>

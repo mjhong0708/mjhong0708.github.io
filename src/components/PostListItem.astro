@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "@/lib/utils";
+import { getPostHref } from "@/lib/blog";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  showDescription?: boolean;
+}
+
+const { post, showDescription = true } = Astro.props;
+
+const href = getPostHref(post);
+const formattedDate = formatDate(post.data.date);
+---
+
+<div>
+  <a href={href} class="text-lg font-medium hover:underline">
+    {post.data.title}
+  </a>
+  {showDescription && post.data.description ? (
+    <p class="text-base text-gray-800">{post.data.description}</p>
+  ) : null}
+  <p class="text-sm text-gray-600">{formattedDate}</p>
+</div>

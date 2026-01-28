@@ -1,27 +1,17 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
 import RootLayout from "@/layouts/RootLayout.astro";
 import Container from "@/components/Container.astro";
+import PostListItem from "@/components/PostListItem.astro";
+import {
+  getPublishedPosts,
+  groupPostsByYear,
+  getYearsDesc,
+  sortPostsByDateDesc,
+} from "@/lib/blog";
 
-const blogCollection = await getCollection(
-  "blog",
-  (post) => post.data.draft !== true,
-);
-const posts = blogCollection.sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
-);
-
-const postsByYear: Record<string, CollectionEntry<"blog">[]> = {};
-posts.forEach((post) => {
-  const year = new Date(post.data.date).getFullYear().toString();
-  if (!postsByYear[year]) {
-    postsByYear[year] = [];
-  }
-  postsByYear[year].push(post);
-});
-const years = Object.keys(postsByYear).sort(
-  (a, b) => parseInt(b) - parseInt(a),
-);
+const posts = sortPostsByDateDesc(await getPublishedPosts());
+const postsByYear = groupPostsByYear(posts);
+const years = getYearsDesc(postsByYear);
 ---
 
 <RootLayout>
@@ -34,22 +24,7 @@ const years = Object.keys(postsByYear).sort(
             <h2 class="font-semibold text-xl">{year}</h2>
             <div class="space-y-4">
               {postsByYear[year].map((post) => (
-                <div>
-                  <a
-                    href={`/posts/${post.data.slug ?? post.id}`}
-                    class="text-lg font-medium hover:underline"
-                  >
-                    {post.data.title}
-                  </a>
-                  <p class="text-base text-gray-800">{post.data.description}</p>
-                  <p class="text-sm text-gray-600">
-                    {new Date(post.data.date).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                </div>
+                <PostListItem post={post} />
               ))}
             </div>
           </div>

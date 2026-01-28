@@ -1,15 +1,24 @@
 ---
 import Container from "@/components/Container.astro";
-import Welcome from "../components/Welcome.astro";
 import RootLayout from "@/layouts/RootLayout.astro";
+import PostListItem from "@/components/PostListItem.astro";
+import { getPublishedPosts, sortPostsByDateDesc } from "@/lib/blog";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = sortPostsByDateDesc(await getPublishedPosts()).slice(0, 10);
 ---
 
 <RootLayout>
   <Container>
-    <!-- <Welcome /> -->
-    <h1 class="text-xl">Hello, world!</h1>
+    <div class="space-y-6">
+      <h1 class="text-2xl font-semibold">Recent posts</h1>
+      <div class="space-y-4">
+        {posts.map((post) => (
+          <PostListItem post={post} />
+        ))}
+      </div>
+      <a href="/posts" class="text-base font-medium underline">
+        Show all posts
+      </a>
+    </div>
   </Container>
 </RootLayout>
