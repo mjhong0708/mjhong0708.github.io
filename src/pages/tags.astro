@@ -1,0 +1,27 @@
+---
+import { getCollection } from "astro:content";
+import LinkedBadge from "@/components/LinkedBadge.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
+import Container from "@/components/Container.astro";
+
+const posts = await getCollection("blog", (post) => post.data.draft !== true);
+const tagsSet = new Set<string>();
+posts.forEach((post) => {
+  const tags = post.data.tags || [];
+  tags.forEach((tag) => tagsSet.add(tag));
+});
+const tags = Array.from(tagsSet).sort();
+---
+
+<RootLayout>
+  <Container>
+    <h1 class="font-semibold text-2xl">Tags</h1>
+    <div class="mt-6 flex flex-wrap gap-3">
+      {tags.map((tag) => (
+        <LinkedBadge href={`/tags/${tag}`} key={tag} class="text-sm text-foreground bg-gray-300">
+          {tag}
+        </LinkedBadge>
+      ))}
+    </div>
+  </Container>
+</RootLayout>

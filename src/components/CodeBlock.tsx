@@ -23,7 +23,7 @@ export default function CodeBlock({
       code={code}
       language={language}
       showLineNumbers={true}
-      className="not-prose"
+      className="not-prose bg-white"
     >
       <CodeBlockHeader>
         <CodeBlockTitle>

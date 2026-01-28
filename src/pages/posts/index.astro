@@ -27,7 +27,7 @@ const years = Object.keys(postsByYear).sort(
 <RootLayout>
   <Container>
     <div class="space-y-10">
-      <h1 class="font-semibold text-2xl">Blog Posts</h1>
+      <h1 class="font-semibold text-2xl">Posts</h1>
       {
         years.map((year) => (
           <div class="space-y-6">
@@ -36,7 +36,7 @@ const years = Object.keys(postsByYear).sort(
               {postsByYear[year].map((post) => (
                 <div>
                   <a
-                    href={`/blog/${post.data.slug ?? post.id}`}
+                    href={`/posts/${post.data.slug ?? post.id}`}
                     class="text-lg font-medium hover:underline"
                   >
                     {post.data.title}

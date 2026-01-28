@@ -1,0 +1,11 @@
+---
+import { Badge } from "./ui/badge";
+
+const { href, class: className, variant } = Astro.props;
+---
+
+<Badge variant={variant} className={className} client:load>
+  <a href={href} target="_self" rel="noopener noreferrer">
+    <slot />
+  </a>
+</Badge>
