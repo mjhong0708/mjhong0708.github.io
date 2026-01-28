@@ -27,6 +27,20 @@ export function getAllTags(posts: CollectionEntry<"blog">[]) {
   return Array.from(tagsSet).sort()
 }
 
+export function countTags(posts: CollectionEntry<"blog">[]) {
+  const tagCounts: Record<string, number> = {}
+  posts.forEach((post) => {
+    const tags = post.data.tags ?? []
+    tags.forEach((tag) => {
+      if (!tagCounts[tag]) {
+        tagCounts[tag] = 0
+      }
+      tagCounts[tag] += 1
+    })
+  })
+  return tagCounts
+}
+
 export function groupPostsByYear(posts: CollectionEntry<"blog">[]) {
   const postsByYear: Record<string, CollectionEntry<"blog">[]> = {}
   posts.forEach((post) => {

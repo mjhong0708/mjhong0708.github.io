@@ -1,0 +1,28 @@
+---
+import LinkedBadge from "@/components/LinkedBadge.astro";
+import RootLayout from "@/layouts/RootLayout.astro";
+import Container from "@/components/Container.astro";
+import { getAllTags, getPublishedPosts, countTags } from "@/lib/blog";
+
+const tagCounts = countTags(await getPublishedPosts());
+---
+
+<RootLayout>
+  <Container>
+    <h1 class="font-semibold text-2xl">Tags</h1>
+    <div class="mt-6 flex flex-wrap gap-3">
+      {
+        Object.keys(tagCounts).map((tag) => (
+          <LinkedBadge
+            href={`/tags/${tag}`}
+            key={tag}
+            class="text-sm text-foreground bg-gray-300"
+          >
+            <span>{tag}</span>{" "}
+            <span class="text-muted-foreground">({tagCounts[tag]})</span>
+          </LinkedBadge>
+        ))
+      }
+    </div>
+  </Container>
+</RootLayout>
